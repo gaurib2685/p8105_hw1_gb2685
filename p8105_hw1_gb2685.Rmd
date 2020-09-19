@@ -7,14 +7,18 @@ output: github_document
 
 This is my solution to HW1 
 
+*Loaded the packages that I need for this project.* 
 ```{r}
 library(tidyverse)
+```
+```{r}
+library(palmerpenguins)
 ```
 
 
 ## Problem 1
 
-Create a dataframe comprised of the specified elements: 
+*Create a dataframe comprised of the specified elements:* 
 
 ```{r}
 prob1_df = 
@@ -26,7 +30,7 @@ tibble(
 )
 ```
 
-Take the mean of each variable in my data frame. 
+*Take the mean of each variable in my data frame.* 
 
 ```{r}
 mean(pull(prob1_df, samp))
@@ -36,12 +40,12 @@ mean(pull(prob1_df, factor_vec))
 ```
 I can take the means of numbers and logical but not character or factor. Logical gets understood by R as 1 or 0 and hence R at the backend does that calculation for us and gives the mean 
 
-```{r}
-as.numeric(pull(prob1_df, samp))
+```{r results=FALSE}
 as.numeric(pull(prob1_df, samp_gt_0))
 as.numeric(pull(prob1_df, char_vec))
 as.numeric(pull(prob1_df, factor_vec))
 ```
+Can convert the logical and factor vectors to numerics and then take means but could not convert the character vector to numeric and hence could not take the mean 
 
 ```{r}
 as.numeric(pull(prob1_df, samp_gt_0)) * pull(prob1_df, samp)
@@ -55,4 +59,101 @@ as.factor(pull(prob1_df, samp_gt_0)) * pull(prob1_df, samp)
 as.numeric(as.factor(pull(prob1_df, samp_gt_0))) * pull(prob1_df, samp)
 ```
 
+## Problem 2 
+
+*I loaded the penguins dataset:* 
+```{r}
+data("penguins", package = "palmerpenguins")
+
+```
+*Description of the dataset:*
+
+```{r}
+nrow(penguins)
+ncol(penguins)
+```
+
+There are **344 observations** and **8 variables** in the dataset *penguins*
+
+*I want to explore which are the 8 variable names:* 
+```{r}
+variable.names(penguins)
+```
+The names of the variables in the dataset are *species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, year*
+
+*To find the categories of species and islands and the number of penguins pertaining to each species and island:* 
+```{r}
+levels(pull(penguins, species))
+levels(pull(penguins, island))
+```
+```{r}
+count(penguins, species)
+count(penguins, island)
+count(penguins, sex)
+```
+
+The three penguin species are *Adelie (n = 152), Chinstrap (n = 68), Gentoo (n=124)*
+The islands are named *Biscoe (n = 168), Dream (n = 124) and Torgersen (n = 52)*
+*165* penguins are *females*, *168* are *males* and *11* are *unknown*.
+
+*To find the mean size measurements:*
+ 
+```{r}
+
+mean (pull(penguins, bill_length_mm),na.rm = TRUE)
+mean (pull(penguins, bill_depth_mm),na.rm = TRUE)
+mean (pull(penguins, flipper_length_mm),na.rm = TRUE)
+mean (pull(penguins, body_mass_g),na.rm = TRUE)
+
+```
+The mean *bill length* for the penguins is *43.92 mm.* 
+The mean *bill depth* for the penguins is *17.15 mm.* 
+The mean *flipper length* for the penguins is *200.91 mm.* 
+The mean *body mass* for the penguins is *4201.75 grams.* 
+
+I wanted to know the mean size measurements which I believe are important here and stratified them by the species group.
+*The mean size measurements stratified by the species are calculated below:*
+```{r}
+aggregate(penguins[,3:6],list(pull(penguins,species)),mean,na.rm=TRUE)
+```
+
+I wanted to know whether the mean sizes for a species differed by the islands. 
+*Therefore I stratified that relationship with islands.*
+```{r}
+aggregate(penguins[,3:6],list(pull(penguins,island), pull(penguins,species)),mean,na.rm=TRUE)
+
+```
+
+
+*I calculated the number of rows and columns in the dataset:*
+```{r}
+nrow(penguins)
+
+```
+
+There are **344 rows** in the *penguins* dataset
+
+```{r}
+ncol(penguins)
+```
+There are **8 columns** in the *penguins* dataset 
+
+```{r}
+mean (as.numeric(pull(penguins, flipper_length_mm)),na.rm = TRUE)
+```
+
+**The mean flipper length is 200.9152 mm.** 
+
+*I made the following scatterplot:*
+```{r}
+y = pull(penguins, flipper_length_mm)
+x = pull(penguins, bill_length_mm)
+ggplot(penguins, aes(x = x, y = y, color = species)) + geom_point() + labs(x="Bill length", y = "Flipper length") + ggtitle("Scatterplot of flipper length vs bill length of penguins")
+```
+
+*Received the following Warning message:Removed 2 rows containing missing values (geom_point). This could be because two rows had NA for flipper length*
+
+```{r}
+ggsave("scatter_plot1.pdf" )
+```
 
