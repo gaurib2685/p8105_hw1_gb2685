@@ -2,6 +2,27 @@
 title: "Homework 1"
 author: Gauri Bhatkhande
 output: github_document
+
 ---
 
 This is my solution to HW1 
+
+```{r}
+library(tidyverse)
+```
+
+
+## Problem 1
+
+Create a dataframe comprised of the specified elements: 
+
+```{r}
+prob1_df=
+  tibble(
+    samp = rnorm(10),
+    samp_gt_0 = samp > 0, 
+    char_vec = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
+    factor_vec = factor(c("low", "low", "low", "mod", "mod", "mod", "mod", "high", "high", "high" ))
+)
+```
+
