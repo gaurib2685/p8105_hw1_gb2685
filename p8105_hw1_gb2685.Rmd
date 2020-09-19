@@ -17,12 +17,42 @@ library(tidyverse)
 Create a dataframe comprised of the specified elements: 
 
 ```{r}
-prob1_df=
-  tibble(
+prob1_df = 
+tibble(
     samp = rnorm(10),
     samp_gt_0 = samp > 0, 
     char_vec = c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"),
     factor_vec = factor(c("low", "low", "low", "mod", "mod", "mod", "mod", "high", "high", "high" ))
 )
 ```
+
+Take the mean of each variable in my data frame. 
+
+```{r}
+mean(pull(prob1_df, samp))
+mean(pull(prob1_df, samp_gt_0))
+mean(pull(prob1_df, char_vec))
+mean(pull(prob1_df, factor_vec))
+```
+I can take the means of numbers and logical but not character or factor. Logical gets understood by R as 1 or 0 and hence R at the backend does that calculation for us and gives the mean 
+
+```{r}
+as.numeric(pull(prob1_df, samp))
+as.numeric(pull(prob1_df, samp_gt_0))
+as.numeric(pull(prob1_df, char_vec))
+as.numeric(pull(prob1_df, factor_vec))
+```
+
+```{r}
+as.numeric(pull(prob1_df, samp_gt_0)) * pull(prob1_df, samp)
+```
+
+```{r}
+as.factor(pull(prob1_df, samp_gt_0)) * pull(prob1_df, samp)
+```
+
+```{r}
+as.numeric(as.factor(pull(prob1_df, samp_gt_0))) * pull(prob1_df, samp)
+```
+
 
