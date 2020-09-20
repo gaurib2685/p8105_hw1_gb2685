@@ -5,7 +5,7 @@ output: github_document
 
 ---
 
-This is my solution to HW1 
+This is my solution to HW1: 
 
 *Loaded the packages that I need for this project.* 
 ```{r}
@@ -18,7 +18,7 @@ library(palmerpenguins)
 
 ## Problem 1
 
-*Create a dataframe comprised of the specified elements:* 
+*Created a dataframe comprised of the specified elements:* 
 
 ```{r}
 prob1_df = 
@@ -38,14 +38,14 @@ mean(pull(prob1_df, samp_gt_0))
 mean(pull(prob1_df, char_vec))
 mean(pull(prob1_df, factor_vec))
 ```
-I can take the means of numbers and logical but not character or factor. Logical gets understood by R as 1 or 0 and hence R at the backend does that calculation for us and gives the mean 
+I can take the means of numbers and logical but not character or factor vectors. Logical gets understood by R as 1 or 0 and hence R at the backend does that calculation for us and gives the mean 
 
 ```{r results=FALSE}
 as.numeric(pull(prob1_df, samp_gt_0))
 as.numeric(pull(prob1_df, char_vec))
 as.numeric(pull(prob1_df, factor_vec))
 ```
-Can convert the logical and factor vectors to numerics and then take means but could not convert the character vector to numeric and hence could not take the mean 
+I can convert the logical to numeric and convert the factor vectors to numeric and then take means but could not convert the character vector to numeric and hence could not take the mean. This explains why I  could not take the means for the character vector, but could take the mean for the factor vector after I convert it to numeric. 
 
 ```{r}
 as.numeric(pull(prob1_df, samp_gt_0)) * pull(prob1_df, samp)
@@ -64,85 +64,67 @@ as.numeric(as.factor(pull(prob1_df, samp_gt_0))) * pull(prob1_df, samp)
 *I loaded the penguins dataset:* 
 ```{r}
 data("penguins", package = "palmerpenguins")
-
 ```
-*Description of the dataset:*
+#### Description of the dataset:
 
-```{r}
-nrow(penguins)
-ncol(penguins)
-```
+**Data, names and values of variables**
 
-There are **344 observations** and **8 variables** in the dataset *penguins*
+There are **`r nrow(penguins)` observations** and **`r ncol(penguins)` variables** in the dataset *penguins*
 
 *I want to explore which are the 8 variable names:* 
-```{r}
-variable.names(penguins)
-```
-The names of the variables in the dataset are *species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, year*
 
-*To find the categories of species and islands and the number of penguins pertaining to each species and island:* 
-```{r}
-levels(pull(penguins, species))
-levels(pull(penguins, island))
-```
-```{r}
-count(penguins, species)
-count(penguins, island)
-count(penguins, sex)
+The names of the variables in the dataset are - `r variable.names(penguins)`.
+
+*I found the categories of species and islands and the number of penguins pertaining to each species and island. I also calculated the counts of male and female penguins:* 
+
+The three penguin species are `r levels(pull(penguins, species))`.
+The islands in consideration are `r levels(pull(penguins, island))`.
+The counts of species are Adelie =`r sum(pull(penguins, species)=='Adelie')` , Chinstrap = `r sum(pull(penguins, species)=='Chinstrap')` and Gentoo = `r sum(pull(penguins, species)=='Gentoo')`. There are `r sum(pull(penguins,sex)=='male', na.rm=TRUE)` male penguins and `r sum(pull(penguins,sex)=='female', na.rm=TRUE)` female penguins. 
+
+*I calculated the distribution of penguin species on islands and their mean bill and flipper lengths*
+```{r, echo=FALSE}
+p1_island1 = filter(penguins, species=='Adelie',island =="Biscoe")
+p1_island2 = filter(penguins, species=='Adelie',island =="Dream")
+p1_island3 = filter(penguins, species=='Adelie',island =="Torgersen")
+p2_island1 = filter(penguins, species=='Chinstrap',island =="Biscoe")
+p2_island2 = filter(penguins, species=='Chinstrap',island =="Dream")
+p2_island3 = filter(penguins, species=='Chinstrap',island =="Torgersen")
+p3_island1 = filter(penguins, species=='Gentoo',island =="Biscoe")
+p3_island2 = filter(penguins, species=='Gentoo',island =="Dream")
+p3_island3 = filter(penguins, species=='Gentoo',island =="Torgersen")
+
 ```
 
-The three penguin species are *Adelie (n = 152), Chinstrap (n = 68), Gentoo (n=124)*
-The islands are named *Biscoe (n = 168), Dream (n = 124) and Torgersen (n = 52)*
-*165* penguins are *females*, *168* are *males* and *11* are *unknown*.
+There are `r count(p1_island1) ` Adelie penguins in the island Biscon with an average bill length of `r mean (pull(p1_island1, bill_length_mm),na.rm = TRUE)` mm and average flipper length of `r mean (pull(p1_island1, flipper_length_mm),na.rm = TRUE)`
 
-*To find the mean size measurements:*
+There are `r count(p1_island2) ` Adelie penguins in the island Dream with an average bill length of `r mean (pull(p1_island2, bill_length_mm),na.rm = TRUE)` mm and average flipper length of `r mean (pull(p1_island2, flipper_length_mm),na.rm = TRUE)`
+
+There are `r count(p1_island3) ` Adelie penguins in the island Torgersen with an average bill length of `r mean (pull(p1_island3, bill_length_mm),na.rm = TRUE)` mm and average flipper length of `r mean (pull(p1_island3, flipper_length_mm),na.rm = TRUE)`
+
+There are `r count(p2_island2) ` Chinstrap penguins in the island Dream with an average bill length of `r mean (pull(p2_island2, bill_length_mm),na.rm = TRUE)` mm and average flipper length of `r mean (pull(p2_island2, flipper_length_mm),na.rm = TRUE)`
+
+There are `r count(p3_island1) ` Gentoo penguins in the island Biscon with an average bill length of `r mean (pull(p3_island1, bill_length_mm),na.rm = TRUE)` mm and average flipper length of `r mean (pull(p3_island1, flipper_length_mm),na.rm = TRUE)`
+
+*To find the mean size measurements for all penguins:*
  
-```{r}
+The mean *bill length* for the penguins is `r mean (pull(penguins, bill_length_mm),na.rm = TRUE)` mm.
+The mean *bill depth* for the penguins is `r mean (pull(penguins, bill_depth_mm),na.rm = TRUE)` mm.
+The mean *flipper length* for the penguins is `r mean (pull(penguins, flipper_length_mm),na.rm = TRUE)` mm.
+The mean *body mass* for the penguins is `r mean (pull(penguins, body_mass_g),na.rm = TRUE)` grams.
 
-mean (pull(penguins, bill_length_mm),na.rm = TRUE)
-mean (pull(penguins, bill_depth_mm),na.rm = TRUE)
-mean (pull(penguins, flipper_length_mm),na.rm = TRUE)
-mean (pull(penguins, body_mass_g),na.rm = TRUE)
-
-```
-The mean *bill length* for the penguins is *43.92 mm.* 
-The mean *bill depth* for the penguins is *17.15 mm.* 
-The mean *flipper length* for the penguins is *200.91 mm.* 
-The mean *body mass* for the penguins is *4201.75 grams.* 
-
-I wanted to know the mean size measurements which I believe are important here and stratified them by the species group.
-*The mean size measurements stratified by the species are calculated below:*
-```{r}
-aggregate(penguins[,3:6],list(pull(penguins,species)),mean,na.rm=TRUE)
-```
-
-I wanted to know whether the mean sizes for a species differed by the islands. 
-*Therefore I stratified that relationship with islands.*
-```{r}
-aggregate(penguins[,3:6],list(pull(penguins,island), pull(penguins,species)),mean,na.rm=TRUE)
-
-```
-
+**Size of the dataset**
 
 *I calculated the number of rows and columns in the dataset:*
-```{r}
-nrow(penguins)
 
-```
+There are `r nrow(penguins)` rows in the *penguins* dataset. There are `r ncol(penguins)` columns in the *penguins* dataset. 
 
-There are **344 rows** in the *penguins* dataset
+**Mean flipper length**
 
-```{r}
-ncol(penguins)
-```
-There are **8 columns** in the *penguins* dataset 
+*I calculated the mean flipper length.*
 
-```{r}
-mean (as.numeric(pull(penguins, flipper_length_mm)),na.rm = TRUE)
-```
+The mean flipper length is `r mean (as.numeric(pull(penguins, flipper_length_mm)),na.rm = TRUE)` mm.
 
-**The mean flipper length is 200.9152 mm.** 
+#### Scatterplot:
 
 *I made the following scatterplot:*
 ```{r}
